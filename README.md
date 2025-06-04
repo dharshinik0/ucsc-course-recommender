@@ -17,7 +17,7 @@ The tool helps students plan their academic path by recommending the best classe
 
 ## 💾 Dataset
 
-We used simulated course data from the [UCSC CSE 2024 course offerings](https://courses.engineering.ucsc.edu/courses/cse/2024), including:
+We used simulated course data from the UCSC course offerings, including:
 - Course name  
 - Offered quarters  
 - Prerequisites  
