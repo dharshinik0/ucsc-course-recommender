@@ -7,9 +7,9 @@ class CourseRecommender:
         self.courses = pd.read_csv(csv_path)
         self.courses.fillna('', inplace=True)
         self.vectorizer = TfidfVectorizer(stop_words='english')
-        # Combine relevant text fields for NLP
+        # Combine relevant text fields for NLP - using your CSV columns
         self.courses['combined'] = self.courses.apply(
-            lambda row: ' '.join([str(row.get('title', '')), str(row.get('description', '')), str(row.get('tags', ''))]), axis=1)
+            lambda row: ' '.join([str(row.get('course_number', '')), str(row.get('tags', '')), str(row.get('prerequisites', ''))]), axis=1)
         self.tfidf_matrix = self.vectorizer.fit_transform(self.courses['combined'])
 
     def recommend(self, preferences, top_n=5):
@@ -23,15 +23,27 @@ class CourseRecommender:
             preferences.get('skill_level', ''),
             preferences.get('time_availability', '')
         ])
+        
+        # Transform the query
         query_vec = self.vectorizer.transform([query])
-        similarities = cosine_similarity(query_vec, self.tfidf_matrix).flatten()
-        self.courses['relevance'] = similarities
-        # Filter by time_availability if provided
-        if preferences.get('time_availability'):
-            mask = self.courses['time'].str.contains(preferences['time_availability'], case=False, na=False)
-            filtered = self.courses[mask].copy()
-        else:
-            filtered = self.courses.copy()
-        # Sort by relevance
-        recommended = filtered.sort_values('relevance', ascending=False).head(top_n)
-        return recommended[['course_id', 'title', 'description', 'relevance']].to_dict(orient='records')
+        
+        # Calculate cosine similarities
+        cosine_similarities = cosine_similarity(query_vec, self.tfidf_matrix).flatten()
+        
+        # Get top N course indices
+        top_indices = cosine_similarities.argsort()[-top_n:][::-1]
+        
+        # Return recommended courses
+        recommendations = []
+        for idx in top_indices:
+            course = self.courses.iloc[idx]
+            recommendations.append({
+                'course_number': course.get('course_number', 'N/A'),
+                'tags': course.get('tags', 'N/A'),
+                'prerequisites': course.get('prerequisites', 'N/A'),
+                'quarters_offered': course.get('quarters_offered', 'N/A'),
+                'difficulty_rating': course.get('difficulty_rating', 'N/A'),
+                'score': cosine_similarities[idx]
+            })
+        
+        return recommendations
