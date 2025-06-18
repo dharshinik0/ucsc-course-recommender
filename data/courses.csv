@@ -1,0 +1,9 @@
+course_id,title,description,tags,term_offered,instructor
+CSE3,Personal Computer Concepts: Software and Hardware,"Introduction to personal computers, software, and hardware concepts.",computers,hardware,software,Fall 2025; Spring 2026,Gerald B Moulds
+CSE5J,Introduction to Programming in Java,"Introductory programming using Java. No prior experience required.",java,programming,beginner,Fall 2025,,
+CSE12,Computer Systems and Assembly Language and Lab,"Covers computer systems, assembly language, and lab work.",assembly,systems,lab,Fall 2025; Winter 2026; Spring 2026,Sagnik Nath; Marcelo Siero; Heiner H Litz
+CSE13E,Embedded Systems and C Programming,"Embedded systems concepts and C programming.",embedded,C,programming,Fall 2025,,
+CSE16,Applied Discrete Mathematics,"Introduction to discrete mathematics for computer science.",discrete,mathematics,computer science,Fall 2025; Winter 2026; Spring 2026,Kyle A Miller; Peter A Alvaro; John T Musacchio
+CSE20,Beginning Programming in Python,"Intro to programming using Python. No prior experience required.",python,programming,beginner,Fall 2025; Winter 2026; Spring 2026,Hao Yue; Benedict John Paten
+CSE30,Programming Abstractions: Python,"Intermediate programming and data structures in Python.",python,programming,data structures,Fall 2025; Winter 2026; Spring 2026,Hao Yue
+CSE40,Machine Learning Basics: Data Analysis and Empirical Methods,"Introduction to machine learning, data analysis, and empirical methods.",machine learning,data analysis,empirical,Fall 2025; Winter 2026; Spring 2026,Hao Yue; Cihang Xie; Jeffrey M Flanigan
