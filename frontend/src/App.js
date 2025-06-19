@@ -46,7 +46,7 @@ useEffect(() => {
   };
 
   loadCourses();
-}, []);
+}, [courseData]);
 
 
   const exampleProfiles = [
