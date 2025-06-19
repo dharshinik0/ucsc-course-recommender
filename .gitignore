@@ -1,0 +1,16 @@
+# Node modules
+/frontend/node_modules
+/frontend/build
+
+# Python virtual environment
+/venv
+__pycache__/
+*.pyc
+.env
+.flaskenv
+
+# Operating System files
+.DS_Store
+
+# Jupyter notebooks (if any)
+.ipynb_checkpoints/
