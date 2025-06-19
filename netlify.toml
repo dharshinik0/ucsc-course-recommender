@@ -1,0 +1,7 @@
+[build]
+  base = "frontend/"          # Tells Netlify to go into 'frontend' folder first
+  command = "npm run build"   # Run 'npm run build' inside 'frontend/'
+  publish = "build/"          # The output of 'npm run build' (from inside 'frontend/') is in 'build/'
+
+[build.environment]
+  REACT_APP_BACKEND_URL = "http://localhost:5001" # Temporary placeholder for local testing
