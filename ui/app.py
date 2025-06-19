@@ -1,9 +1,14 @@
 import streamlit as st
-from recommender.recommender import CourseRecommender
+import sys
 import os
 
+# Add the project root to Python path
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from recommender.recommender import CourseRecommender
+
 # Path to the CSV file
-data_path = os.path.join(os.path.dirname(__file__), '../new_cse.csv')
+data_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'new_cse.csv')
 
 # Initialize recommender
 recommender = CourseRecommender(data_path)
