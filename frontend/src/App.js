@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react'; // ADDED useMemo
 import { Brain, CheckSquare, Target, User, BookOpen, Award } from 'lucide-react';
 
 const App = () => {
@@ -7,7 +7,8 @@ const App = () => {
   const [loading, setLoading] = useState(false);
   const [availableCourses, setAvailableCourses] = useState([]);
 
-  const courseData = [
+  // courseData is now memoized to prevent re-creation on every render
+  const courseData = useMemo(() => [ // WRAPPED WITH useMemo
     { course_number: 'CSE 3', tags: 'intro', prerequisites: 'NONE', quarters_offered: 'Fall, Winter, Spring', difficulty_rating: 1 },
     { course_number: 'CSE 12', tags: 'systems', prerequisites: 'CSE 5J or CSE 20 or CSE 30 or BME 160', quarters_offered: 'Fall, Winter, Spring', difficulty_rating: 2 },
     { course_number: 'CSE 13S', tags: 'programming', prerequisites: 'CSE 12 or BME 160', quarters_offered: 'Fall, Winter, Spring', difficulty_rating: 3 },
@@ -15,9 +16,9 @@ const App = () => {
     { course_number: 'CSE 101', tags: 'algorithms', prerequisites: 'CSE 12, CSE 13S', quarters_offered: 'Fall, Winter, Spring', difficulty_rating: 4 },
     { course_number: 'CSE 120', tags: 'systems', prerequisites: 'CSE 12', quarters_offered: 'Fall, Spring', difficulty_rating: 3 },
     { course_number: 'CSE 130', tags: 'systems', prerequisites: 'CSE 12, CSE 13S', quarters_offered: 'Winter, Spring', difficulty_rating: 4 }
-  ];
+  ], []); // ADDED DEPENDENCY ARRAY FOR useMemo
 
-  const graduatePrograms = [
+  const majors = [ // Renamed from graduatePrograms
     { id: 'AM-GRAD', name: 'Applied Mathematics Graduate Program' },
     { id: 'BME-GRAD', name: 'Biomolecular Engineering Graduate Program' },
     { id: 'CM-GRAD', name: 'Computational Media Graduate Program' },
@@ -27,27 +28,27 @@ const App = () => {
   ];
 
   // Load real courses from API when component mounts
-useEffect(() => {
-  const loadCourses = async () => {
-    try {
-      const response = await fetch('http://localhost:5001/api/courses');
-      const data = await response.json();
+  useEffect(() => {
+    const loadCourses = async () => {
+      try {
+        // USE ENV VARIABLE FOR BACKEND URL
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/courses`);
+        const data = await response.json();
 
-      if (data.status === 'success') {
-        const courseNumbers = data.courses.map(course => course.course_number);
-        setAvailableCourses(courseNumbers);
-      } else {
+        if (data.status === 'success') {
+          const courseNumbers = data.courses.map(course => course.course_number);
+          setAvailableCourses(courseNumbers);
+        } else {
+          setAvailableCourses(courseData.map(course => course.course_number));
+        }
+      } catch (error) {
+        console.error('Error loading courses:', error);
         setAvailableCourses(courseData.map(course => course.course_number));
       }
-    } catch (error) {
-      console.error('Error loading courses:', error);
-      setAvailableCourses(courseData.map(course => course.course_number));
-    }
-  };
+    };
 
-  loadCourses();
-}, [courseData]);
-
+    loadCourses();
+  }, [courseData]); // courseData is correctly in dependency array
 
   const exampleProfiles = [
     {
@@ -79,9 +80,10 @@ useEffect(() => {
 
   const getRecommendations = async () => {
     setLoading(true);
-  
+
     try {
-      const response = await fetch('http://localhost:5001/api/recommendations', {
+      // USE ENV VARIABLE FOR BACKEND URL
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/recommendations`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -96,9 +98,9 @@ useEffect(() => {
           top_n: 5
         })
       });
-  
+
       const data = await response.json();
-  
+
       if (data.status === 'success') {
         setRecommendations(data.recommendations);
       } else {
@@ -109,10 +111,10 @@ useEffect(() => {
       console.error('Network Error:', error);
       alert('Error connecting to backend: ' + error.message);
     }
-  
+
     setLoading(false);
   };
-  
+
   return (
     <div style={{
       minHeight: '100vh',
@@ -260,7 +262,7 @@ useEffect(() => {
               <CheckSquare size={20} color="#2563eb" style={{ marginRight: '8px' }} />
               <h4 style={{ fontSize: '18px', fontWeight: '500', margin: 0 }}>Completed Courses</h4>
             </div>
-            
+
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '16px' }}>
               <button 
                 onClick={selectAll}
@@ -313,7 +315,7 @@ useEffect(() => {
               gap: '12px', 
               marginBottom: '24px' 
             }}>
-              {graduatePrograms.map((program) => (
+              {majors.map((program) => (
                 <div key={program.id} style={{ textAlign: 'center' }}>
                   <div style={{
                     background: '#f9fafb',
@@ -390,7 +392,7 @@ useEffect(() => {
             <Award size={24} color="#2563eb" style={{ marginRight: '12px' }} />
             <h3 style={{ fontSize: '24px', fontWeight: '600', margin: 0 }}>Example Student Profiles</h3>
           </div>
-          
+
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
             {exampleProfiles.map((profile, index) => (
               <div key={index} style={{
