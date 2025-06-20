@@ -6,6 +6,7 @@ from recommender.recommender import CourseRecommender
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "https://enchanting-concha-647aeb.netlify.app", "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"], "allow_headers": ["Content-Type", "Authorization"]}})csv_path = 'new_cse.csv'
+csv_path = 'new_cse.csv'
 recommender = CourseRecommender(csv_path)
 
 @app.route('/api/health', methods=['GET'])
