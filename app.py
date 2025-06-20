@@ -5,8 +5,7 @@ import os
 from recommender.recommender import CourseRecommender
 
 app = Flask(__name__)
-CORS(app)  # Add this line - enables CORS for all routes
-# Initialize your recommender with the CSV data
+CORS(app, resources={r"/*": {"origins": "*", "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"], "allow_headers": ["Content-Type", "Authorization"]}})# Initialize your recommender with the CSV data
 csv_path = 'new_cse.csv'
 recommender = CourseRecommender(csv_path)
 
